@@ -26,7 +26,6 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    @Transactional
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (uris == null || uris.isEmpty()) {
             if (unique) {
