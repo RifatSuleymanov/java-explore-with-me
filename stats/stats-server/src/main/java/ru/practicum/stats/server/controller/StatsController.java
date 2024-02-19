@@ -22,7 +22,7 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addHit(@Valid @RequestBody EndpointHitDto endpointHitDto){
+    public void addHit(@Valid @RequestBody EndpointHitDto endpointHitDto) {
         statsService.addHit(endpointHitDto);
 
     }
@@ -31,8 +31,8 @@ public class StatsController {
     public List<ViewStatsDto> getStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                        @RequestParam(required = false) List<String> uris,
-                                       @RequestParam(required = false, defaultValue = "false") Boolean unique){
-        if(start.isAfter(end)){
+                                       @RequestParam(required = false, defaultValue = "false") Boolean unique) {
+        if (start.isAfter(end)) {
             throw new IllegalArgumentException("Неверно указан временной интервал!");
         }
         return statsService.getStats(start, end, uris, unique);

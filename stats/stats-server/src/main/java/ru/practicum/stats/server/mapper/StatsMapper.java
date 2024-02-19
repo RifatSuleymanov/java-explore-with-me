@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @UtilityClass
 public class StatsMapper {
-    public static Stats endpointToStats(EndpointHitDto endpointHitDto, LocalDateTime timestamp){
+    public static Stats endpointToStats(EndpointHitDto endpointHitDto, LocalDateTime timestamp) {
         return new Stats(null, endpointHitDto.getApp(), endpointHitDto.getUri(), endpointHitDto.getIp(), timestamp);
     }
 }

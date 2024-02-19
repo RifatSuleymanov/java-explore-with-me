@@ -15,8 +15,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class StatsServiceImpl implements StatsService{
+public class StatsServiceImpl implements StatsService {
     private final StatsRepository statsRepository;
+
     @Override
     @Transactional
     public void addHit(EndpointHitDto endpointHitDto) {
@@ -27,15 +28,15 @@ public class StatsServiceImpl implements StatsService{
     @Override
     @Transactional
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        if(uris == null || uris.isEmpty()){
-            if(unique){
+        if (uris == null || uris.isEmpty()) {
+            if (unique) {
                 return statsRepository.getAllStatsDistinctIp(start, end);
             } else {
                 return statsRepository.getAllStats(start, end);
             }
         } else {
-            if(unique){
-                return statsRepository.getStatsByUrisDistinctIp(start, end ,uris);
+            if (unique) {
+                return statsRepository.getStatsByUrisDistinctIp(start, end, uris);
             } else {
                 return statsRepository.getStatsByUris(start, end, uris);
             }
