@@ -25,6 +25,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ru.practicum.ewm.model.EventState.PUBLISHED;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -46,16 +48,17 @@ public class EventServiceImpl implements EventService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotExistException(String
                         .format("Пользователь с id = %d не найден.", userId)));
+
+        Category category = categoryRepository.findById(newEventDto.getCategory())
+                .orElseThrow(() -> new CategoryNotExistException(String
+                        .format("Категория с id = %d не существует!", newEventDto.getCategory())));
+
         checkEventTime(newEventDto.getEventDate());
         Event eventToSave = eventMapper.toEventModel(newEventDto);
         eventToSave.setLocation(findOrCreateLocation(newEventDto.getLocation()));
         eventToSave.setState(EventState.PENDING);
         eventToSave.setConfirmedRequests(0);
         eventToSave.setCreatedOn(LocalDateTime.now());
-
-        Category category = categoryRepository.findById(newEventDto.getCategory())
-                .orElseThrow(() -> new CategoryNotExistException(String
-                        .format("Категория с id = %d не существует!", newEventDto.getCategory())));
         eventToSave.setCategory(category);
         eventToSave.setInitiator(user);
         Event saved = eventRepository.save(eventToSave);
@@ -96,7 +99,7 @@ public class EventServiceImpl implements EventService {
         if (updateEventAdminRequest.getStateAction() != null) {
             if (updateEventAdminRequest.getStateAction() == StateAction.PUBLISH_EVENT) {
                 if (eventToUpdate.getState().equals(EventState.PENDING)) {
-                    eventToUpdate.setState(EventState.PUBLISHED);
+                    eventToUpdate.setState(PUBLISHED);
                     eventToUpdate.setPublishedOn(LocalDateTime.now());
                 } else {
                     throw new AlreadyPublishedException("Событие может быть опубликовано только в том случае, " +
@@ -105,7 +108,7 @@ public class EventServiceImpl implements EventService {
                 }
             }
             if (updateEventAdminRequest.getStateAction() == StateAction.REJECT_EVENT) {
-                if (eventToUpdate.getState().equals(EventState.PUBLISHED)) {
+                if (eventToUpdate.getState().equals(PUBLISHED)) {
                     throw new AlreadyPublishedException("Событие может быть отклонено только в том случае, " +
                             "если оно еще не было опубликовано. " +
                             updateEventAdminRequest.getStateAction());
@@ -336,8 +339,12 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto getEvent(Long id, HttpServletRequest request) {
 
-        Event event = eventRepository.findByIdAndState(id, EventState.PUBLISHED)
-                .orElseThrow(() -> new EventNotExistException(String.format("Событие с id = %d не найдено.", id)));
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() ->  new EventNotExistException(String.format("Событие с id = %d не найдено.", id)));
+
+        if (!event.getState().equals(PUBLISHED)) {
+            throw new EventNotExistException("Event id=" + id + " is not published.");
+        }
 
         statsClient.addHit(APP_NAME, request.getRequestURI(),  request.getRemoteAddr(), LocalDateTime.now());
 
