@@ -5,12 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.validation.annotation.Validated;
+import ru.practicum.ewm.dto.group.*;
 import ru.practicum.ewm.model.Formats;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -18,26 +16,24 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Validated
 public class NewEventDto {
-    @NotBlank
-    @Size(min = 20, max = 2000)
+    @NotNull(groups = NewGroup.class)
+    @Size(min = 20, max = 2000, groups = {NewGroup.class, UpdateGroup.class})
     private String annotation;
     @NotNull
     private Long category;
-    @NotBlank
-    @Size(min = 20, max = 7000)
+    @NotNull(groups = NewGroup.class)
+    @Size(min = 20, max = 7000, groups = {NewGroup.class, UpdateGroup.class})
     private String description;
-    @NotNull
+    @NotNull(groups = NewGroup.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.DATE)
     private LocalDateTime eventDate;
-    @NotNull
+    @NotNull(groups = NewGroup.class)
     private LocationDto location;
     private Boolean paid;
-    @PositiveOrZero
     private Integer participantLimit;
     private Boolean requestModeration;
-    @NotNull
-    @Size(min = 3, max = 120)
+    @NotNull(groups = NewGroup.class)
+    @Size(min = 3, max = 120, groups = {NewGroup.class, UpdateGroup.class})
     private String title;
 }

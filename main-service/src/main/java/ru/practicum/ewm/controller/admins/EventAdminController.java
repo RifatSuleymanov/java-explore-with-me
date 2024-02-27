@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.UpdateEventRequestDto;
+import ru.practicum.ewm.dto.group.UpdateGroup;
 import ru.practicum.ewm.service.EventService;
 
 import javax.validation.constraints.NotNull;
@@ -40,7 +41,7 @@ public class EventAdminController {
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto updateEvent(@NotNull @PathVariable(name = "eventId") Long eventId,
-                                    @Validated
+                                    @Validated(UpdateGroup.class)
                                     @RequestBody UpdateEventRequestDto updateEventAdminRequest) {
         return eventService.updateEventByAdmin(eventId, updateEventAdminRequest);
     }
