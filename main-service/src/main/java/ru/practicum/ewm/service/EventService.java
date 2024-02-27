@@ -7,6 +7,7 @@ import ru.practicum.ewm.dto.event.NewEventDto;
 import ru.practicum.ewm.dto.event.UpdateEventRequestDto;
 import ru.practicum.ewm.model.EventSortValue;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface EventService {
@@ -39,5 +40,5 @@ public interface EventService {
                                              String uri,
                                              String ip);
 
-    EventFullDto getEvent(Long id, String uri, String ip);
+    EventFullDto getEvent(Long id, HttpServletRequest request);
 }

@@ -1,6 +1,7 @@
 package ru.practicum.ewm.controller.publics;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 @RequestMapping("/events")
 public class EventPublicController {
     private final EventService eventService;
@@ -48,6 +50,8 @@ public class EventPublicController {
 
     @GetMapping("/{id}")
     public EventFullDto getEvent(@PathVariable Long id, HttpServletRequest request) {
-        return eventService.getEvent(id, request.getRequestURI(), request.getRemoteAddr());
+        log.info(String.format("Получен запрос GET /events/{id} = %s на получение категории", id));
+        return eventService.getEvent(id, request);
     }
+
 }

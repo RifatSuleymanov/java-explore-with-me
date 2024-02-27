@@ -153,15 +153,4 @@ public class ErrorHandler {
                         .toUpperCase(),
                 LocalDateTime.now().format(DATE_FORMATTER));
     }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleUndefinedException(final Throwable throwable) {
-        return new ApiError(throwable.getMessage(), "Внутренняя ошибка сервера.",
-                HttpStatus
-                        .INTERNAL_SERVER_ERROR
-                        .getReasonPhrase()
-                        .toUpperCase(),
-                LocalDateTime.now().format(DATE_FORMATTER));
-    }
 }

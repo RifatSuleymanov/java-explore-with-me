@@ -19,6 +19,7 @@ import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.stats.client.StatsClient;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -333,19 +334,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getEvent(Long eventId, String uri, String ip) {
+    public EventFullDto getEvent(Long id, HttpServletRequest request) {
 
-        Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
-                .orElseThrow(() -> new EventNotExistException(String.format("Событие с id = %d не найдено.", eventId)));
+        Event event = eventRepository.findByIdAndState(id, EventState.PUBLISHED)
+                .orElseThrow(() -> new EventNotExistException(String.format("Событие с id = %d не найдено.", id)));
 
-        statsClient.addHit(APP_NAME, uri, ip, LocalDateTime.now());
+        statsClient.addHit(APP_NAME, request.getRequestURI(),  request.getRemoteAddr(), LocalDateTime.now());
 
-        Long views = statsClient.getStatistics(eventId);
+        Long views = statsClient.getStatistics(id);
 
         EventFullDto eventDto = eventMapper.toEventFullDto(event);
         eventDto.setViews(views);
 
         return eventDto;
     }
-
 }
