@@ -24,7 +24,7 @@ public class CompilationPublicController {
                                                         defaultValue = "0") @PositiveOrZero Integer from,
                                                 @RequestParam(name = "size", required = false,
                                                         defaultValue = "10") @Positive Integer size) {
-        return compilationService.getCompilations(pinned,  PageRequest.of(from / size, Math.toIntExact(size)));
+        return compilationService.getCompilations(pinned, PageRequest.of(from / size, Math.toIntExact(size)));
     }
 
     @GetMapping("/{compId}")

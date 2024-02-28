@@ -7,11 +7,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.dto.event.*;
-import ru.practicum.ewm.exception.*;
+import ru.practicum.ewm.dto.event.EventFullDto;
+import ru.practicum.ewm.dto.event.EventShortDto;
+import ru.practicum.ewm.dto.event.LocationDto;
+import ru.practicum.ewm.dto.event.NewEventDto;
+import ru.practicum.ewm.dto.event.UpdateEventRequestDto;
+import ru.practicum.ewm.exception.AlreadyPublishedException;
+import ru.practicum.ewm.exception.CategoryNotExistException;
+import ru.practicum.ewm.exception.EventNotExistException;
+import ru.practicum.ewm.exception.EventValidationException;
+import ru.practicum.ewm.exception.UserNotExistException;
 import ru.practicum.ewm.mapper.EventMapper;
 import ru.practicum.ewm.mapper.LocationMapper;
-import ru.practicum.ewm.model.*;
+import ru.practicum.ewm.model.Category;
+import ru.practicum.ewm.model.Event;
+import ru.practicum.ewm.model.EventSortValue;
+import ru.practicum.ewm.model.EventState;
+import ru.practicum.ewm.model.Formats;
+import ru.practicum.ewm.model.Location;
+import ru.practicum.ewm.model.StateAction;
+import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.repository.LocationRepository;
@@ -22,7 +37,14 @@ import ru.practicum.stats.client.StatsClient;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static ru.practicum.ewm.model.EventState.PUBLISHED;
@@ -356,6 +378,9 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() ->  new EventNotExistException(String.format("Событие с id = %d не найдено.", id)));
 
+        if (event == null) {
+            throw new IllegalStateException("Состояние события равно null.");
+        }
         if (!event.getState().equals(PUBLISHED)) {
             throw new EventNotExistException("Event id=" + id + " is not published.");
         }
