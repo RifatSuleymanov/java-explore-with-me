@@ -223,7 +223,7 @@ public class EventServiceImpl implements EventService {
                     .collect(Collectors.toList());
         }
         List<EventState> stateList;
-        if(states != null){
+        if (states != null) {
             stateList = states
                     .stream()
                     .map(EventState::valueOf)
@@ -376,7 +376,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto getEvent(Long id, HttpServletRequest request) {
 
         Event event = eventRepository.findById(id)
-                .orElseThrow(() ->  new EventNotExistException(String.format("Событие с id = %d не найдено.", id)));
+                .orElseThrow(() -> new EventNotExistException(String.format("Событие с id = %d не найдено.", id)));
 
         if (event == null) {
             throw new IllegalStateException("Состояние события равно null.");
@@ -385,7 +385,7 @@ public class EventServiceImpl implements EventService {
             throw new EventNotExistException("Event id=" + id + " is not published.");
         }
 
-        statsClient.addHit(APP_NAME, request.getRequestURI(),  request.getRemoteAddr(), LocalDateTime.now());
+        statsClient.addHit(APP_NAME, request.getRequestURI(), request.getRemoteAddr(), LocalDateTime.now());
 
         Long views = statsClient.getStatistics(id);
 
