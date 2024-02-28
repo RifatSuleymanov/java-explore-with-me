@@ -15,7 +15,7 @@ public class RequestDto {
     private Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.DATE)
     private LocalDateTime created;
-    private Long event;
-    private Long requester;
+    private Long eventId;
+    private Long requesterId;
     private String status;
 }
