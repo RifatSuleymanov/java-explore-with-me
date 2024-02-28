@@ -97,6 +97,9 @@ public class EventServiceImpl implements EventService {
             checkEventTime(updateEventAdminRequest.getEventDate());
         }
         if (updateEventAdminRequest.getStateAction() != null) {
+            if (eventToUpdate == null) {
+                throw new IllegalStateException("Состояние события равно null.");
+            }
             if (updateEventAdminRequest.getStateAction() == StateAction.PUBLISH_EVENT) {
                 if (eventToUpdate.getState().equals(EventState.PENDING)) {
                     eventToUpdate.setState(PUBLISHED);
@@ -127,7 +130,13 @@ public class EventServiceImpl implements EventService {
 
         Event eventFromDb = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotExistException(String.format("Событие с id = %d не найдено.", eventId)));
-        if (eventFromDb.getState().equals(EventState.CANCELED) || eventFromDb.getState().equals(EventState.PENDING)) {
+
+        EventState eventState = eventFromDb.getState();
+        if (eventState == null) {
+            throw new IllegalStateException("Состояние события равно null.");
+        }
+
+        if (eventState.equals(EventState.CANCELED) || eventState.equals(EventState.PENDING)) {
             if (updateEventUserRequest.getEventDate() != null
                     && updateEventUserRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
                 throw new EventValidationException("Дата и время на которые намечено событие не может быть раньше, " +
@@ -141,7 +150,7 @@ public class EventServiceImpl implements EventService {
             }
         } else {
             throw new AlreadyPublishedException("Вы можете изменить отмененные события, ровно как и события, " +
-                    "ожидающие модерации. Статус данного события = " + eventFromDb.getState());
+                    "ожидающие модерации. Статус данного события = " + eventState);
         }
 
         updateEventEntity(updateEventUserRequest, eventFromDb);
@@ -185,17 +194,22 @@ public class EventServiceImpl implements EventService {
                                                   String rangeEnd,
                                                   Pageable pageable) {
 
-        if (states == null & rangeStart == null & rangeEnd == null) {
+        if (states == null && rangeStart == null && rangeEnd == null) {
             return eventRepository.findAll(pageable)
                     .stream()
                     .map(eventMapper::toEventFullDto)
                     .collect(Collectors.toList());
         }
-
-        List<EventState> stateList = states
-                .stream()
-                .map(EventState::valueOf)
-                .collect(Collectors.toList());
+        List<EventState> stateList;
+        if(states != null){
+            stateList = states
+                    .stream()
+                    .map(EventState::valueOf)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        } else {
+            throw new EventNotExistException("states = null");
+        }
 
         LocalDateTime start;
         if (rangeStart != null && !rangeStart.isEmpty()) {

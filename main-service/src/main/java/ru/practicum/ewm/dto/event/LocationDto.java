@@ -1,6 +1,12 @@
 package ru.practicum.ewm.dto.event;
 
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.Builder;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;

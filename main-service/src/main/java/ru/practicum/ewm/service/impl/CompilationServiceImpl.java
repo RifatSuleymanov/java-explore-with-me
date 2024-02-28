@@ -75,9 +75,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
-        int pageNum = from / size;
-        Pageable pageable = PageRequest.of(pageNum, Math.toIntExact(size));
+    public List<CompilationDto> getCompilations(Boolean pinned, Pageable pageable) {
         List<Compilation> compilations;
         if (pinned == null) {
             compilations = compilationRepository.getCompilations(pageable);

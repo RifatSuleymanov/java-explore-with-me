@@ -10,7 +10,6 @@ import ru.practicum.ewm.model.Formats;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestDto {

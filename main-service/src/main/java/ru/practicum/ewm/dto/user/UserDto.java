@@ -10,7 +10,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {

@@ -1,6 +1,7 @@
 package ru.practicum.ewm.controller.publics;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
@@ -23,7 +24,7 @@ public class CompilationPublicController {
                                                         defaultValue = "0") @PositiveOrZero Integer from,
                                                 @RequestParam(name = "size", required = false,
                                                         defaultValue = "10") @Positive Integer size) {
-        return compilationService.getCompilations(pinned, from, size);
+        return compilationService.getCompilations(pinned,  PageRequest.of(from / size, Math.toIntExact(size)));
     }
 
     @GetMapping("/{compId}")

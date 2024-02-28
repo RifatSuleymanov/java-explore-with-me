@@ -9,7 +9,6 @@ import ru.practicum.ewm.dto.event.EventShortDto;
 import java.util.List;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompilationDto {
