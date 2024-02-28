@@ -1,12 +1,11 @@
 package ru.practicum.ewm.dto.request;
 
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import ru.practicum.ewm.model.UpdateRequestStatus;
 
 import java.util.List;

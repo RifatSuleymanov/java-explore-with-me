@@ -22,9 +22,9 @@ public class CategoryPublicController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CategoryDto> getCategories(@RequestParam(required = false, defaultValue = "0")
-                                           @PositiveOrZero Integer from,
+                                                @PositiveOrZero Integer from,
                                            @RequestParam(required = false, defaultValue = "10")
-                                           @Positive Integer size) {
+                                                @Positive Integer size) {
         return categoryService.getCategories(PageRequest.of(from / size, size));
     }
 
