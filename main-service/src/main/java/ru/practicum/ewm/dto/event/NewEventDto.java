@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.ewm.dto.group.*;
+
+import ru.practicum.ewm.dto.group.NewGroup;
+import ru.practicum.ewm.dto.group.UpdateGroup;
 import ru.practicum.ewm.model.Formats;
 
 import javax.validation.constraints.NotNull;
