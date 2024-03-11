@@ -32,6 +32,42 @@ public class ErrorHandler {
                 LocalDateTime.now().format(DATE_FORMATTER));
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ApiError handleEntityNotFoundException(final EntityNotFoundException exception) {
+        return new ApiError(exception.getMessage(),"Сущность не найдена.",
+                HttpStatus
+                        .NOT_FOUND
+                        .getReasonPhrase()
+                        .toUpperCase(),
+                LocalDateTime.now().format(DATE_FORMATTER));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiError handleEventNotPublishedException(final EventNotPublishedException exception) {
+        return new ApiError(exception.getMessage(), "Событие еще не опубликовано.",
+                HttpStatus
+                        .CONFLICT
+                        .getReasonPhrase()
+                        .toUpperCase(),
+                LocalDateTime.now().format(DATE_FORMATTER));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ApiError handleUserIsNotAnAuthorException(final UserIsNotAnAuthorException exception) {
+        return new ApiError(exception
+                .getMessage(), "Пользователь не имеет доступа к управлению этим комментарием.",
+                HttpStatus
+                        .CONFLICT
+                        .getReasonPhrase()
+                        .toUpperCase(),
+                LocalDateTime.now().format(DATE_FORMATTER));
+    }
 
     @ExceptionHandler({
             CategoryIsNotEmptyException.class,
