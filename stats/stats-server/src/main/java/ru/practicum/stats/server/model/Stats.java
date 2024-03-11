@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Table(name = "stats", schema = "public")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Stats {
     @Id
@@ -25,6 +25,7 @@ public class Stats {
 
     @Column(name = "user_ip", nullable = false, length = 15)
     private String ip;
+
     @Column(name = "created", nullable = false)
     private LocalDateTime timestamp;
 }

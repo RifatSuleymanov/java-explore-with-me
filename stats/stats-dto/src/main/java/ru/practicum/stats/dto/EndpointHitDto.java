@@ -26,5 +26,4 @@ public class EndpointHitDto {
     @NotBlank
     private String timestamp;
 
-
 }

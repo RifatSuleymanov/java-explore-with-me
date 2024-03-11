@@ -17,14 +17,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class StatsController {
-
     private final StatsService statsService;
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
     public void addHit(@Valid @RequestBody EndpointHitDto endpointHitDto) {
         statsService.addHit(endpointHitDto);
-
     }
 
     @GetMapping("/stats")
